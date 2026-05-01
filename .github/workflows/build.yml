@@ -28,9 +28,12 @@ jobs:
       - run: npx cap add android
       - run: npx cap sync android
 
-      - name: Force Gradle to use Java 17
+      - name: Force Java 17 in Android Project
         run: |
           cd android
+          sed -i 's/JavaVersion.VERSION_21/JavaVersion.VERSION_17/g' app/build.gradle
+          sed -i 's/JavaVersion.VERSION_21/JavaVersion.VERSION_17/g' build.gradle
+          sed -i 's/jvmTarget = "21"/jvmTarget = "17"/g' app/build.gradle
           echo "org.gradle.java.home=/usr/lib/jvm/temurin-17-jdk-amd64" >> gradle.properties
           chmod +x ./gradlew
           ./gradlew assembleDebug
