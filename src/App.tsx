@@ -1,73 +1,25 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useStore } from './store';
-import { UserRole } from './constants';
-import { motion, AnimatePresence } from 'motion/react';
-
-// Pages (to be created)
-import Home from './Home';
-import ProductDetail from './ProductDetail';
-import OrderDetails from './OrderDetails';
-import Wallet from './Wallet';
-import Login from './Login';
-import MyOrders from './MyOrders';
-import Profile from './Profile';
-import Cart from './Cart';
-import Checkout from './Checkout';
-
 export default function App() {
-  const { user, loading, setUser, setLoading } = useStore();
-
-  useEffect(() => {
-    // Simulate auth check
-    const timeout = setTimeout(() => {
-      // For demo purposes, we auto-login as a reseller
-      /*
-      setUser({
-        uid: 'r1',
-        displayName: 'Zeeshan Shop',
-        role: UserRole.RESELLER,
-        pendingBalance: 12000,
-        availableBalance: 4500
-      });
-      */
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timeout);
-  }, [setUser, setLoading]);
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-[#1E3A8A]">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="text-white text-4xl font-bold italic"
-        >
-          $1
-        </motion.div>
-        <div className="mt-4 text-white/70 text-sm tracking-widest uppercase">1 Dollar</div>
-      </div>
-    );
-  }
-
   return (
-    <Router>
-      <div className="min-h-screen bg-white text-[#111827] max-w-md mx-auto shadow-2xl relative">
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/order/:id" element={<OrderDetails />} />
-            <Route path="/wallet" element={user ? <Wallet /> : <Navigate to="/login" />} />
-            <Route path="/orders" element={user ? <MyOrders /> : <Navigate to="/login" />} />
-            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-          </Routes>
-        </AnimatePresence>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #1E3A8A, #000)', 
+      color: '#FFD700',
+      display: 'flex', 
+      flexDirection: 'column',
+      alignItems: 'center', 
+      justifyContent: 'center',
+      fontFamily: 'sans-serif',
+      textAlign: 'center',
+      padding: '20px'
+    }}>
+      <div style={{fontSize: '5rem', fontWeight: 'bold'}}>$1</div>
+      <div style={{fontSize: '1.5rem', marginTop: '1rem'}}>1 Dollar App</div>
+      <div style={{fontSize: '0.9rem', marginTop: '2rem', color: '#fff', opacity: 0.8}}>
+        APK Build Successful!
       </div>
-    </Router>
-  );
+      <div style={{fontSize: '0.7rem', marginTop: '1rem', color: '#fff', opacity: 0.5}}>
+        Welcome to your E-commerce Store
+      </div>
+    </div>
+  )
 }
