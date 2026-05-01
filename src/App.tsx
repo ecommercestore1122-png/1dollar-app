@@ -5,15 +5,15 @@ import { UserRole } from './constants';
 import { motion, AnimatePresence } from 'motion/react';
 
 // Pages (to be created)
-import Home from './pages/Home';
-import ProductDetail from './pages/ProductDetail';
-import OrderDetails from './pages/OrderDetails';
-import Wallet from './pages/Wallet';
-import Login from './pages/Login';
-import MyOrders from './pages/MyOrders';
-import Profile from './pages/Profile';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
+import Home from './Home';
+import ProductDetail from './ProductDetail';
+import OrderDetails from './OrderDetails';
+import Wallet from './Wallet';
+import Login from './Login';
+import MyOrders from './MyOrders';
+import Profile from './Profile';
+import Cart from './Cart';
+import Checkout from './Checkout';
 
 export default function App() {
   const { user, loading, setUser, setLoading } = useStore();
@@ -39,7 +39,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-[#1E3A8A]">
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className="text-white text-4xl font-bold italic"
