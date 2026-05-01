@@ -1,0 +1,99 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information including roles and wallet balances.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "role": { "type": "string", "enum": ["customer", "reseller", "supplier", "admin"] },
+        "shopName": { "type": "string" },
+        "paymentInfo": {
+          "type": "object",
+          "properties": {
+            "easypaisa": { "type": "string" },
+            "jazzcash": { "type": "string" }
+          }
+        },
+        "pendingBalance": { "type": "number" },
+        "availableBalance": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "role"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Product details available in the catalog.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "wholesalePrice": { "type": "number" },
+        "supplierId": { "type": "string" },
+        "category": { "type": "string" },
+        "quantity": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "title", "wholesalePrice", "supplierId"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Escrow-based order records.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "resellerId": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "productId": { "type": "string" },
+        "wholesalePrice": { "type": "number" },
+        "resellerProfit": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paymentLocked": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["placed", "accepted", "shipped", "delivered", "completed", "disputed"] },
+        "supplierDeadline": { "type": "string", "format": "date-time" },
+        "customerConfirmDeadline": { "type": "string", "format": "date-time" },
+        "autoReleaseTime": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "customerId", "productId", "totalAmount", "status"]
+    },
+    "Dispute": {
+      "title": "Order Dispute",
+      "description": "Dispute records for escrow resolution.",
+      "type": "object",
+      "properties": {
+        "disputeId": { "type": "string" },
+        "orderId": { "type": "string" },
+        "initiatorId": { "type": "string" },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "resolved", "dismissed"] },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "senderId": { "type": "string" },
+              "text": { "type": "string" },
+              "timestamp": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["disputeId", "orderId", "initiatorId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "User", "description": "User profiles" },
+    "/products/{productId}": { "schema": "Product", "description": "Global product catalog" },
+    "/orders/{orderId}": { "schema": "Order", "description": "Escrow orders" },
+    "/orders/{orderId}/disputes/{disputeId}": { "schema": "Dispute", "description": "Disputes related to an order" }
+  }
+}
