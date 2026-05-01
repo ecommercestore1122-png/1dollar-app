@@ -1,6 +1,8 @@
 {
-  "name": "1dollar-app",
+  "name": "1dollar-product",
   "private": true,
+  ...
+}
   "version": "0.0.0",
   "type": "module",
   "scripts": {
