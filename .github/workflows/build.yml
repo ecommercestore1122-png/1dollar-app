@@ -1,4 +1,4 @@
-name: Build Android APK - REAL FINAL
+name: Build Android APK - FINAL FIX
 on:
   push:
     branches: [ main ]
@@ -34,19 +34,20 @@ jobs:
       - run: npm install @capacitor/core@5 @capacitor/cli@5 @capacitor/android@5
       
       - name: DELETE OLD ANDROID
-        run: rm -rf android node_modules/.cache
-        
-      - run: npx cap init "1DollarApp" "com.onedollar.app" --web-dir=dist
-      - run: npx cap add android
+        run: rm -rf android
       
-      - name: FORCE SYNC - YE SABSE ZAROORI HAI
+      - name: ADD ANDROID PLATFORM
+        run: npx cap add android
+        
+      - name: SYNC - YE CONFIG.TS USE KARE GA
         run: npx cap sync android
         
       - name: VERIFY APK CONTENT
         run: |
           echo "=== APK MEIN KYA GAYA ==="
           cat android/app/src/main/assets/public/index.html
-          ls -la android/app/src/main/assets/public/assets/
+          echo "=== APP NAME ==="
+          grep -r "1 Dollar Product" android/ || echo "Name not found"
       
       - name: BUILD APK
         run: |
@@ -56,5 +57,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: 1Dollar-App-FINAL
+          name: 1Dollar-Product-FINAL
           path: android/app/build/outputs/apk/debug/app-debug.apk
