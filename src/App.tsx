@@ -1,101 +1,69 @@
 import { useState } from 'react';
 
 function App() {
-  window.onerror = (msg) => {
-    alert('ERROR: ' + msg);
-    return true;
-  };
-
   const products = [
-    {id: 1, name: 'Sasti T-Shirt', price: 1, emoji: '👕', desc: '100% Cotton'},
-    {id: 2, name: '1 Dollar Coffee', price: 1, emoji: '☕', desc: 'Instant Mix'},
-    {id: 3, name: 'Mobile Cover', price: 1, emoji: '📱', desc: 'All Models'},
-    {id: 4, name: 'Earphones', price: 1, emoji: '🎧', desc: 'Bass Wale'},
-    {id: 5, name: 'Power Bank', price: 1, emoji: '🔋', desc: '5000mAh'},
-    {id: 6, name: 'Keychain', price: 1, emoji: '🔑', desc: 'Fancy'},
+    {id: 1, name: 'T-Shirt', price: 1},
+    {id: 2, name: 'Coffee', price: 1},
+    {id: 3, name: 'Cover', price: 1},
+    {id: 4, name: 'Earphones', price: 1}
   ];
 
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
 
   const addToCart = (product) => {
-    const exist = cart.find(item => item.id === product.id);
+    const exist = cart.find(x => x.id === product.id);
     if (exist) {
-      setCart(cart.map(item => 
-        item.id === product.id ? {...item, qty: item.qty + 1} : item
-      ));
+      setCart(cart.map(x => x.id === product.id ? {...x, qty: x.qty + 1} : x));
     } else {
       setCart([...cart, {...product, qty: 1}]);
     }
-    alert(product.name + ' cart mein add ho gaya ✅');
-  };
-
-  const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
-  };
-
-  const updateQty = (id, newQty) => {
-    if (newQty === 0) {
-      removeFromCart(id);
-      return;
-    }
-    setCart(cart.map(item => 
-      item.id === id ? {...item, qty: newQty} : item
-    ));
+    alert(product.name + ' added');
   };
 
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
 
-  const checkoutWhatsApp = () => {
+  const checkout = () => {
     if (cart.length === 0) {
-      alert('Cart khali hai pehle kuch add karo');
+      alert('Cart empty');
       return;
     }
-    let message = '🛒 *1 Dollar Store Order* 🛒%0A%0A';
+    let text = 'Order:%0A';
     cart.forEach(item => {
-      message += `${item.name} x ${item.qty} = $${item.price * item.qty}%0A`;
+      text += item.name + ' x' + item.qty + '%0A';
     });
-    message += `%0A*Total: $${total}*%0A%0A`;
-    message += 'Name: %0AAddress: %0APhone: ';
-    
-    const phoneNumber = '923432022422';
-    
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-  };
-
-  const btn = {
-    padding: '4px 10px',
-    background: '#eee',
-    border: '1px solid #ccc',
-    borderRadius: 4,
-    fontSize: 16
+    text += 'Total: $' + total;
+    window.open('https://wa.me/923432022422?text=' + text);
   };
 
   return (
-    <div style={{fontFamily: 'Arial', background: '#f0f0f0', minHeight: '100vh'}}>
-      <div style={{background: 'green', padding: 16, color: 'white', position: 'sticky', top: 0}}>
-        <h1 style={{margin: 0, fontSize: 22, textAlign: 'center'}}>1 Dollar Store ✅</h1>
-        <button 
-          onClick={() => setShowCart(!showCart)}
-          style={{
-            position: 'absolute', right: 16, top: 16,
-            background: 'white', color: 'green', border: 'none',
-            padding: '8px 12px', borderRadius: 20, fontWeight: 'bold'
-          }}
-        >
-          🛒 {totalItems}
-        </button>
-      </div>
-
+    <div style={{padding: 20}}>
+      <h1 style={{color: 'green'}}>1 Dollar Store</h1>
+      <button onClick={() => setShowCart(!showCart)}>Cart {cart.length}</button>
+      
       {showCart ? (
-        <div style={{padding: 16}}>
-          <h2>Your Cart 🛒</h2>
-          {cart.length === 0 ? (
-            <p style={{textAlign: 'center', marginTop: 40}}>Cart khali hai 😢</p>
-          ) : (
-            <>
-              {cart.map(item => (
-                <div key={item.id} style={{
-                  background: 'white', padding: 12, margin: '8px 0',
-                  borderRadius
+        <div>
+          <h2>Cart</h2>
+          {cart.map(item => (
+            <p key={item.id}>{item.name} x {item.qty}</p>
+          ))}
+          <h3>Total: ${total}</h3>
+          <button onClick={checkout}>WhatsApp Order</button>
+          <button onClick={() => setShowCart(false)}>Back</button>
+        </div>
+      ) : (
+        <div>
+          {products.map(p => (
+            <div key={p.id} style={{border: '1px solid #ccc', margin: 10, padding: 10}}>
+              <h3>{p.name}</h3>
+              <p>${p.price}</p>
+              <button onClick={() => addToCart(p)}>Add</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
