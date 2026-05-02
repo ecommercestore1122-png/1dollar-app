@@ -1,3 +1,6 @@
+window.onerror = (msg, url, line) => {
+  alert('Error: ' + msg)
+}
 function App() {
   return (
     <div style={{padding: 40, textAlign: 'center'}}>
